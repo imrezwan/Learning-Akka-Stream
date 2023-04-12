@@ -16,5 +16,16 @@ object FirstPrinciples extends App {
 
   val flow = Flow[Int].map( _ * 10)
 
-  source.via(flow).to(sink).run()
+//  source.via(flow).to(sink).run()
+
+  // create a stream that takes the names of persons, then you will keep the first 2 names with length > 5 char
+
+  val personsSource = Source(List("Rezwan", "Robin", "Rana", "Sheldon", "Walter"))
+  val personsFlow = Flow[String].filter(_.length > 5)
+  val limitFlow = Flow[String].take(2)
+  val personsSink = Sink.foreach(println)
+
+  personsSource.via(personsFlow).via(limitFlow).to(personsSink).run();
+
+
 }
